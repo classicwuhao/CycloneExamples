@@ -1,0 +1,24 @@
+
+/**
+ * A simple counting machine has three instructions only:
+ * increment the counter.
+ * decrement the counter.
+ * reset the counter.
+ */
+graph Counter {
+    int c;
+    normal start node R { c = 0; }
+    normal node I { c++; }    
+    normal node D { c--; }
+    
+    edge { R -> * }
+    edge { I -> * }
+    edge { D -> * }
+    
+    goal {
+        assert c == 3;
+        enumerate for 5
+            condition (D)
+            reach (R, I, D)
+    }
+}
