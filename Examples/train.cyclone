@@ -1,8 +1,10 @@
 option-trace=true;          //generate a trace
+option-precision=5;
 graph train_braking_controller {
     real p where p>=0,v;   // position and velocity
     real ua;               // acceleration
-    real t,dt;             // time pointer (now) and sampling time
+    real t;
+    real dt where dt >0;   // time pointer (now) and sampling time
     real S;                // position of the stop sign
     real A,B;              // (de)acceleration A and B
 
@@ -18,22 +20,22 @@ graph train_braking_controller {
     }
     
     edge {Init -> Decide}
-    edge {Decide -> Acc where v>=0 &&
-            (p + ((v * v) / (2 * B)) + (A/B+1)*(0.5*A*dt*dt+dt*v) <= S);}
+    edge {Decide -> Acc where v>=0 && (p + ((v * v) / (2 * B)) 
+                + (A/B+1)*(0.5*A*dt*dt+dt*v) <= S);}
 
-    edge {Decide -> Maintain where v==0 &&
-            !(p + ((v * v) / (2 * B)) + (A/B+1)*(0.5*A*dt*dt+dt*v) <= S);}
+    edge {Decide -> Maintain where v==0 && !(p + ((v * v) / (2 * B))
+            + (A/B+1)*(0.5*A*dt*dt+dt*v) <= S);}
 
-    edge {Decide -> Brake where v!=0 &&
-            !(p + ((v * v) / (2 * B)) + (A/B+1)*(0.5*A*dt*dt+dt*v) <= S);}
+    edge {Decide -> Brake where v!=0 && !(p + ((v * v) / (2 * B))
+            + (A/B+1)*(0.5*A*dt*dt+dt*v) <= S);}
 
     edge {Acc -> Progression}
     edge {Brake -> Progression}
     edge {Maintain -> Progression}    
     edge {Progression -> Decide}
 
-    /* system invariant */
-    invariant SysInv{p + ((v * v) / (2 * B)) <= S && v >= 0;}
+    /* proposed invariant */
+    invariant PropInv{p + ((v * v) / (2 * B)) <= S && v >= 0;}
     
     goal{
       /* setting initial conditions */  
@@ -41,6 +43,6 @@ graph train_braking_controller {
       p + ((v * v) / (2 * B)) <= S && dt>0 && S>0 && A>0 && B>0) in (Init);
       
       /* small scope check to find a counter-example */
-      check for 5
+      check for 3
     }
 }
