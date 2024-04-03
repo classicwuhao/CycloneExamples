@@ -1,0 +1,36 @@
+/**
+ * A bouncing ball model
+ */
+option-trace=true;
+graph Bouncing_Ball { 
+    /* variable block: declare variables */
+    real x where x >= 0;           // position
+    real v;                        // velocity
+    real t where t >= 0;           // time
+    const real G = 9.81;           // gravitational force
+    real c where c >= 0 && c <= 1; // constant (energy loss)
+
+    /* node block: define nodes of graph, can contain code */
+    normal start final node Fall {
+        x = x + v * t;
+        v = v - G * t;
+    }
+
+    normal final node Bounce {
+        v = -c * v;
+        x = 0;
+    }
+
+    /* edge block: connect nodes with each other */
+    edge { Fall -> Fall }
+    edge { Fall -> Bounce where x == 0 && v <= 0; }
+    edge { Bounce -> Fall }
+
+    /* invariant block: the position of the ball is never < 0 */
+    invariant inv { x >= 0; }
+
+    /* goal block: indicate which paths to explore */
+    goal {
+        check for 2,3,4,5
+    }
+}
