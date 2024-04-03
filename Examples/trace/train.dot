@@ -1,0 +1,106 @@
+/*
+* Dot trace for train_braking_controller
+* [Time Stamp]:10:10:16, Apr-03-2024
+* [Location]:/Users/haowu/CycloneExamples/Examples/trace/train.dot
+* [States]:6
+* Acc Brake Decide Init Maintain Progression 
+* [Trans]:8
+* [Start State]:Init
+* [Final State(s)]:
+*Acc Brake Maintain Progression 
+* [Trace Length]:6 
+*/
+
+
+
+
+digraph G { 
+
+
+
+	 rankdir="LR"
+
+
+
+label="train_braking_controller \n 10:10:16, Apr-03-2024"
+labelloc=" b " ;
+labeljust=" c ";
+	n0 [color="black", style="rounded, filled" , fillcolor="pink" , shape="rect", label= < 
+ 		 <table border='0' cellborder='0' style='rounded'> 
+			 <tr><td align="center" colspan="2" > <b>[0] @Init</b></td></tr>
+			 <tr><td align="center">A : </td><td>3.00000</td></tr> 
+			 <tr><td align="center">B : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">S : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">dt : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">p : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">t : </td><td>0.00000</td></tr> 
+			 <tr><td align="center">ua : </td><td>0.00000</td></tr> 
+			 <tr><td align="center">v : </td><td>1.00000</td></tr> 
+		 </table> > ]
+	n1 [color="black", style="rounded, filled" , fillcolor="orange" , shape="rect", label= < 
+ 		 <table border='0' cellborder='0' style='rounded'> 
+			 <tr><td align="center" colspan="2" > <b>[1] @Decide</b></td></tr>
+			 <tr><td align="center">A : </td><td>3.00000</td></tr> 
+			 <tr><td align="center">B : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">S : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">dt : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">p : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">t : </td><td>0.00000</td></tr> 
+			 <tr><td align="center">ua : </td><td>0.00000</td></tr> 
+			 <tr><td align="center">v : </td><td>1.00000</td></tr> 
+		 </table> > ]
+	n2 [color="black", style="rounded, filled" , fillcolor="orange" , shape="rect", label= < 
+ 		 <table border='0' cellborder='0' style='rounded'> 
+			 <tr><td align="center" colspan="2" > <b>[2] @Brake</b></td></tr>
+			 <tr><td align="center">A : </td><td>3.00000</td></tr> 
+			 <tr><td align="center">B : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">S : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">dt : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">p : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">t : </td><td>0.00000</td></tr> 
+			 <tr><td align="center">ua : </td><td>-2.00000</td></tr> 
+			 <tr><td align="center">v : </td><td>1.00000</td></tr> 
+		 </table> > ]
+	n3 [color="black", style="rounded, filled" , fillcolor="orange" , shape="rect", label= < 
+ 		 <table border='0' cellborder='0' style='rounded'> 
+			 <tr><td align="center" colspan="2" > <b>[3] @Progression</b></td></tr>
+			 <tr><td align="center">A : </td><td>3.00000</td></tr> 
+			 <tr><td align="center">B : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">S : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">dt : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">p : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">t : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">ua : </td><td>-2.00000</td></tr> 
+			 <tr><td align="center">v : </td><td>-1.00000</td></tr> 
+		 </table> > ]
+	n4 [color="black", style="rounded, filled" , fillcolor="orange" , shape="rect", label= < 
+ 		 <table border='0' cellborder='0' style='rounded'> 
+			 <tr><td align="center" colspan="2" > <b>[4] @Decide</b></td></tr>
+			 <tr><td align="center">A : </td><td>3.00000</td></tr> 
+			 <tr><td align="center">B : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">S : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">dt : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">p : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">t : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">ua : </td><td>-2.00000</td></tr> 
+			 <tr><td align="center">v : </td><td>-1.00000</td></tr> 
+		 </table> > ]
+	n5 [color="black", style="rounded, filled" , fillcolor="orange" , shape="rect", label= < 
+ 		 <table border='0' cellborder='0' style='rounded'> 
+			 <tr><td align="center" colspan="2" > <b>[5] @Brake</b></td></tr>
+			 <tr><td align="center">A : </td><td>3.00000</td></tr> 
+			 <tr><td align="center">B : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">S : </td><td>2.00000</td></tr> 
+			 <tr><td align="center">dt : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">p : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">t : </td><td>1.00000</td></tr> 
+			 <tr><td align="center">ua : </td><td>-2.00000</td></tr> 
+			 <tr><td align="center">v : </td><td>-1.00000</td></tr> 
+		 </table> > ]
+
+
+
+
+	n0->n1->n2->n3->n4->n5
+ } 
+
