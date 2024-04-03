@@ -25,7 +25,7 @@
 
 option-trace=true;
 
-machine CoffeeCan{
+graph CoffeeCan{
 	record Can{
 		int white where white >=0;
 		int black where black >=0;
