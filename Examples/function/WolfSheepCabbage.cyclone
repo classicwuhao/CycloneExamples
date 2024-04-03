@@ -1,0 +1,149 @@
+/**
+ * In the missionaries and cannibals problem, a sheperd, a wolf, a sheep and a cabbage
+ * must cross a river using a boat which can carry the sheperd and one other entity,
+ * under the constraint that the wolf and the sheep cannot be west alone on a bank without the sheperd. 
+ * The same condition applies for the sheep and the cabbage.
+ * The boat cannot cross the river by itself with no people on board.
+ */
+
+option-trace=true;
+
+machine WolfSheepCabbage{
+
+    bool wolfEast;
+    bool sheepEast;
+    bool cabbageEast;
+    bool sheperdEast;
+
+    function checkCondition:bool (wolfEast: bool, sheepEast: bool, cabbageEast:bool,sheperdEast:bool){
+        /* 
+        If the entities are with the sheperd, there is no danger. 
+        The wolf shouldn't be left alone with the sheep. 
+        The sheep shouldn't be left alaone with the cabbage
+        */
+        return  !(
+            (!sheperdEast && wolfEast && sheepEast) || (!sheperdEast && sheepEast && cabbageEast) || 
+            (sheperdEast && !wolfEast && !sheepEast) || (sheperdEast && !sheepEast && !cabbageEast)
+            );
+    }
+
+    // Initiate the problem
+    normal start state Start {
+        wolfEast = false;
+        sheepEast = false;
+        cabbageEast = false;
+        sheperdEast = false;
+    }
+
+    /********** West to East **********/
+
+    /* The sheperd cross the river from West to East with the sheep */
+    normal state westToEastWithSheep{
+        sheperdEast = true ;
+        sheepEast = true ;
+    }
+       
+    /* The sheperd cross the river from West to East with the wolf */
+    normal state westToEastWithWolf{
+        sheperdEast = true ;
+        wolfEast = true ;
+    }
+
+    /* The sheperd cross the river from West to East with the cabbage */
+    normal state westToEastWithCabbage{
+        sheperdEast = true ;
+        cabbageEast = true ;
+    }
+
+    /* The sheperd cross the river from West to East alone */
+    normal state westToEastAlone{
+        sheperdEast = true ;
+    }
+
+    /********** East to west **********/
+
+    normal state eastToWestAlone{
+        sheperdEast = false ;
+    }
+
+    normal state eastToWestWithSheep{
+        sheperdEast = false ;
+        sheepEast = false;
+    }
+
+    normal state eastToWestWithWolf{
+        sheperdEast = false ;
+        wolfEast = false;
+    }
+
+    normal state eastToWestWithCabbage{
+        sheperdEast = false ;
+        cabbageEast = false;
+    }
+
+    // List all the possible transitions 
+
+    // When starting can only go west to East
+    trans {Start -> +[eastToWestAlone, eastToWestWithCabbage, eastToWestWithSheep, eastToWestWithWolf]}
+
+    // Exclude west to East travel when already at west
+
+    trans {westToEastWithCabbage -> eastToWestAlone where true; }
+    trans {westToEastWithSheep -> eastToWestAlone where true; }
+    trans {westToEastWithWolf -> eastToWestAlone where true; }
+    trans {westToEastAlone -> eastToWestAlone where true; }
+
+    trans {westToEastWithCabbage -> eastToWestWithWolf where wolfEast == true; }
+    trans {westToEastWithSheep -> eastToWestWithWolf where wolfEast == true; }
+    trans {westToEastWithWolf -> eastToWestWithWolf where wolfEast == true; }
+    trans {westToEastAlone -> eastToWestWithWolf where wolfEast == true;}
+
+    trans {westToEastWithCabbage -> eastToWestWithCabbage where cabbageEast == true; }
+    trans {westToEastWithSheep -> eastToWestWithCabbage where cabbageEast == true; }
+    trans {westToEastWithWolf -> eastToWestWithCabbage where cabbageEast == true; }
+    trans {westToEastAlone -> eastToWestWithCabbage where cabbageEast == true;}
+
+    trans {westToEastWithCabbage -> eastToWestWithSheep where sheepEast == true; }
+    trans {westToEastWithSheep -> eastToWestWithSheep where sheepEast == true; }
+    trans {westToEastWithWolf -> eastToWestWithSheep where sheepEast == true; }
+    trans {westToEastAlone -> eastToWestWithSheep where sheepEast == true;}
+
+
+    // Exclude East to west travel when already at East
+
+    trans {eastToWestWithCabbage -> westToEastAlone where true; }
+    trans {eastToWestWithSheep -> westToEastAlone where true; }
+    trans {eastToWestWithWolf -> westToEastAlone where true; }
+    trans {eastToWestAlone -> westToEastAlone where true; }
+
+    trans {eastToWestWithCabbage -> westToEastWithWolf where wolfEast == false; }
+    trans {eastToWestWithSheep -> westToEastWithWolf where wolfEast == false; }
+    trans {eastToWestWithWolf -> westToEastWithWolf where wolfEast == false; }
+    trans {eastToWestAlone -> westToEastWithWolf where wolfEast == false;}
+
+    trans {eastToWestWithCabbage -> westToEastWithCabbage where cabbageEast == false; }
+    trans {eastToWestWithSheep -> westToEastWithCabbage where cabbageEast == false; }
+    trans {eastToWestWithWolf -> westToEastWithCabbage where cabbageEast == false; }
+    trans {eastToWestAlone -> westToEastWithCabbage where cabbageEast == false;}
+
+    trans {eastToWestWithCabbage -> westToEastWithSheep where sheepEast == false; }
+    trans {eastToWestWithSheep -> westToEastWithSheep where sheepEast == false; }
+    trans {eastToWestWithWolf -> westToEastWithSheep where sheepEast == false; }
+    trans {eastToWestAlone -> westToEastWithSheep where sheepEast == false;}
+
+    goal{
+        /*
+         * Find a way of getting everyone on the east side without one eating another
+         */
+        assert ( wolfEast && sheepEast && cabbageEast && sheperdEast );
+        // At each time the condition is satisfied
+        assert always checkCondition(wolfEast, sheepEast, cabbageEast, sheperdEast);
+        
+        check upto 9 condition (Start^{1}) reach (
+            westToEastAlone, eastToWestAlone, 
+            westToEastWithCabbage,eastToWestWithCabbage, 
+            westToEastWithSheep, eastToWestWithSheep, 
+            westToEastWithWolf, eastToWestWithWolf
+        ) 
+    }
+}

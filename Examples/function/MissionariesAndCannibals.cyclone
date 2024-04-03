@@ -1,0 +1,150 @@
+
+/**
+ * In the missionaries and cannibals problem, three missionaries and three cannibals 
+ * must cross a river using a boat which can carry at most two people,
+ * under the constraint that, for both banks, if there are missionaries present on the bank,
+ * they cannot be outnumbered by cannibals (if they were, the cannibals would eat the missionaries). 
+ * The boat cannot cross the river by itself with no people on board.
+ */
+option-trace=true;
+option-output="dot";
+machine MissionariesAndCannibals{
+    
+    int westBankCannibals where westBankCannibals>=0 && westBankCannibals<=3; // during ANY computation westBankCannibals must not be underflow or overflow.
+    int eastBankCannibals where eastBankCannibals>=0 && eastBankCannibals<=3; // during ANY computation eastBankCannibals must not be underflow or overflow.
+    int westBankMissionaries where westBankMissionaries>=0 && westBankMissionaries<=3; // during ANY computation westBankMissionaries not be underflow or overflow.
+    int eastBankMissionaries where eastBankMissionaries>=0 && eastBankMissionaries<=3; // during ANY computation eastBankMissionaries must not be underflow or overflow.
+  
+
+    /* Check that missionaries aren't outnumbered on both sides */
+    function checkCondition:bool (eastBankCannibals:int, eastBankMissionaries:int, westBankCannibals:int, westBankMissionaries:int){
+        // If there's no missionary on a bank, then they are all on the other bank and can't be outnumbered
+		return ((westBankMissionaries == 0 ) || (eastBankMissionaries == 0) || 
+            ((eastBankMissionaries >= eastBankCannibals) && (westBankMissionaries >= westBankCannibals)));
+	}
+
+    /*
+     * at the beginning, 3 cannibals and 3 missionaries are at west bank.
+     **/
+    start normal state Start{
+        westBankCannibals = 3;
+        westBankMissionaries = 3;
+        eastBankCannibals = 0;
+        eastBankMissionaries = 0;
+    }
+    
+    /*
+     * move 2 cannibals from west to east bank
+     */
+    normal final state WestToEast2Cannibals{
+        westBankCannibals -= 2;
+        eastBankCannibals += 2;
+    }
+
+     /*
+     * move 2 missionaries from west to east bank
+     */
+    normal final state WestToEast2Missionaries{
+        westBankMissionaries -= 2;
+        eastBankMissionaries += 2;
+    }
+    
+    /*
+     * move 1 missionary and 1 cannibal from west to east bank
+     */
+    normal final state WestToEastBoth{
+        westBankMissionaries -= 1;
+        eastBankMissionaries += 1;
+
+        westBankCannibals -= 1;
+        eastBankCannibals += 1;
+    }
+
+    /*
+     * move 1 canniball from west to east bank
+     */
+    normal final state WestToEast1Cannibal{
+        westBankCannibals -= 1;
+        eastBankCannibals += 1;
+    }
+
+     /*
+     * move 1 missionary from west to east bank
+     */
+    normal final state WestToEast1Missionary{
+        westBankMissionaries -= 1;
+        eastBankMissionaries += 1;
+    }
+
+    /*************** East To West **************/
+
+     /*
+     * move 2 cannibals from east to west bank
+     */
+    normal state EastToWest2Cannibals{
+        westBankCannibals += 2;
+        eastBankCannibals -= 2;
+    }
+
+     /*
+     * move 2 missionaries from east to west bank
+     */
+    normal state EastToWest2Missionaries{
+        westBankMissionaries += 2;
+        eastBankMissionaries -= 2;
+    }
+    
+    /*
+     * move 1 missionary and 1 cannibal from east to west bank
+     */
+    normal state EastToWestBoth{
+        westBankMissionaries += 1;
+        eastBankMissionaries -= 1;
+
+        westBankCannibals += 1;
+        eastBankCannibals -= 1;
+    }
+    
+    /*
+     * move 1 cannibal from east to west bank
+     */
+    normal state EastToWest1Cannibal{
+        westBankCannibals += 1;
+        eastBankCannibals -= 1;
+    }
+
+     /*
+     * move 1 missionary from east to west bank
+     */
+    normal state EastToWest1Missionary{
+        westBankMissionaries += 1;
+        eastBankMissionaries -= 1;
+    }
+
+    /*
+     * all possible movments.
+     **/
+    trans {Start -> +[EastToWest1Cannibal, EastToWest1Missionary, EastToWest2Cannibals, EastToWest2Missionaries, EastToWestBoth]}
+    /*** East to West ***/
+    trans {EastToWest1Cannibal -> +[EastToWest1Cannibal, EastToWest1Missionary, EastToWest2Cannibals, EastToWest2Missionaries, EastToWestBoth]}
+    trans {EastToWest2Cannibals -> +[EastToWest1Cannibal, EastToWest1Missionary, EastToWest2Cannibals, EastToWest2Missionaries, EastToWestBoth]}
+    trans {EastToWest1Missionary -> +[EastToWest1Cannibal, EastToWest1Missionary, EastToWest2Cannibals, EastToWest2Missionaries, EastToWestBoth]}
+    trans {EastToWest2Missionaries -> +[EastToWest1Cannibal, EastToWest1Missionary, EastToWest2Cannibals, EastToWest2Missionaries, EastToWestBoth]}
+    trans {EastToWestBoth -> +[EastToWest1Cannibal, EastToWest1Missionary, EastToWest2Cannibals, EastToWest2Missionaries, EastToWestBoth]}
+    /*** West to East ***/
+    trans {WestToEast1Cannibal -> +[WestToEast1Cannibal, WestToEast1Missionary, WestToEast2Cannibals, WestToEast2Missionaries, WestToEastBoth]}
+    trans {WestToEast2Cannibals -> +[WestToEast1Cannibal, WestToEast1Missionary, WestToEast2Cannibals, WestToEast2Missionaries, WestToEastBoth]}
+    trans {WestToEast1Missionary -> +[WestToEast1Cannibal, WestToEast1Missionary, WestToEast2Cannibals, WestToEast2Missionaries, WestToEastBoth]}
+    trans {WestToEast2Missionaries -> +[WestToEast1Cannibal, WestToEast1Missionary, WestToEast2Cannibals, WestToEast2Missionaries, WestToEastBoth]}
+    trans {WestToEastBoth -> +[WestToEast1Cannibal, WestToEast1Missionary, WestToEast2Cannibals, WestToEast2Missionaries, WestToEastBoth]}
+
+    goal{
+        /*
+         * Find a way of getting everyone on the east side without outnumbering
+         */
+        assert ( eastBankMissionaries == 3 && eastBankCannibals == 3 );
+        assert always checkCondition(eastBankCannibals, eastBankMissionaries, westBankCannibals, westBankMissionaries);
+        
+        check for 11 condition (Start^{1})
+    }
+}
