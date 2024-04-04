@@ -30,7 +30,7 @@ graph CoffeeCan{
 		int white where white >=0;
 		int black where black >=0;
 	};
-
+	
 	abstract start node Pick{}
 
 	normal node SameColorBlack{
@@ -65,9 +65,8 @@ graph CoffeeCan{
 		 * we end up with 1 black bean.
 		 * otherwise, we end up with 1 white bean.
 		 */
-		assert  !(((initial(Can.white) % 2==0) => (Can.black==1)) || 
-				((initial(Can.white) % 2!=0) => (Can.white==1)));
-
+		 assert !( ((initial(Can.white) % 2 == 0) => (Can.black == 1)) || 
+            ((initial(Can.white) % 2 != 0) => (Can.white == 1)));
 		/* you can increase the following path length for larger number of beans. */
 		check for 4
 	}

@@ -3,13 +3,13 @@ option-precision=5;
 graph train_braking_controller {
     real p where p>=0,v;   // position and velocity
     real ua;               // acceleration
-    real t;
-    real dt where dt >0;   // time pointer (now) and sampling time
+    real t;                // time pointer (now)
+    real dt where dt >0;   // sampling time
     real S;                // position of the stop sign
     real A,B;              // (de)acceleration A and B
 
     normal start node Init{}
-    normal node Decide{}
+    abstract node Decide{}
     normal final node Acc{ua = A;}
     normal final node Brake{ua = -B;}
     normal final node Maintain{ua = 0;}
