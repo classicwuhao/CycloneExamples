@@ -9,33 +9,33 @@
  */
 
 option-trace=true;
-machine McCarthy91{	
+graph McCarthy91{	
 	int n;
 	int p=1;
 
-	abstract start state M{}
+	abstract start node M{}
 	
-	normal state M1{
+	normal node M1{
 		n=n-10;
 		p=p-1;
 	}
 
-	normal state M2{
+	normal node M2{
 		n=n+11;
 		p=p+1;
 	}
 	/* terminating node */
-	abstract final state T{}
+	abstract final node T{}
 
-	trans t0 { M -> M1 where n>100;}
-	trans t1 { M -> M2}
-	trans t2 { M1 -> M2 where n<=100 && p>=1;}
-	trans t3 { M2 -> M1 where n>100 && p>=1;}
-	trans t4 { M2 -> M2 }
-	trans t5 { M1 -> M1 }  
-	trans t6 { M2 -> T where p==0;}
-	trans t7 { M1 -> T where p==0;}
-	trans t8 { T -> T}
+	edge { M -> M1 where n>100;}
+	edge { M -> M2}
+	edge { M1 -> M2 where n<=100 && p>=1;}
+	edge { M2 -> M1 where n>100 && p>=1;}
+	edge { M2 -> M2 }
+	edge { M1 -> M1 }  
+	edge { M2 -> T where p==0;}
+	edge { M1 -> T where p==0;}
+	edge { T -> T}
 
 	goal{
 		
